@@ -1,10 +1,19 @@
 import prisma from "@/lib/db";
 import { CheckCircle2 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { getStripeSession } from "@/lib/stripe";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getStripeSession, stripe } from "@/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import { StripeSubscriptionCreationButton } from "@/components/SubmitButtons";
+import {
+  StripePortal,
+  StripeSubscriptionCreationButton,
+} from "@/components/SubmitButtons";
 
 const featureItems = [
   { name: "Lorem Ipsum something" },
@@ -15,7 +24,7 @@ const featureItems = [
 ];
 
 async function getData(userId: string) {
-  const data = await prisma.subsciption.findUnique({
+  const data = await prisma.subscription.findUnique({
     where: {
       userId: userId,
     },
@@ -52,12 +61,53 @@ export default async function BillingPage() {
       throw new Error("Unable to get customer id");
     }
 
-    const subsciptionUrl = await getStripeSession({
+    const subscriptionUrl = await getStripeSession({
       customerId: existingUser?.stripeCustomerId,
       domainUrl: "http://localhost:3000",
       priceId: process.env.STRIPE_PRICE_ID as string,
     });
-    return redirect(subsciptionUrl);
+    return redirect(subscriptionUrl);
+  }
+
+  async function createCustomerPortal() {
+    "use server";
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: data?.user.stripeCustomerId as string,
+      return_url: "http://localhost:3000/dashboard",
+    });
+
+    return redirect(session.url);
+  }
+
+  if (data?.status === "active") {
+    return (
+      <div className="grid items-start gap-8">
+        <div className="flex items-center justify-between px-2">
+          <div className="grid gap-1">
+            <h1 className="text-3xl md:text-4xl">Subscription</h1>
+            <p className="text-lg text-muted-foreground">
+              Settings regarding your subscription
+            </p>
+          </div>
+        </div>
+
+        <Card className="w-full lg:w-2/3">
+          <CardHeader>
+            <CardTitle>Edit Subscription</CardTitle>
+            <CardDescription>
+              Click on the button below to change your payment details and view
+              your statement
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form action={createCustomerPortal}>
+              <StripePortal />
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (

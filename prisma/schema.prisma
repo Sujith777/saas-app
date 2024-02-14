@@ -11,15 +11,15 @@ datasource db {
 }
 
 model User {
-  id               String       @id @unique
+  id               String        @id @unique
   name             String?
-  email            String       @unique
-  stripeCustomerId String?      @unique
-  colorScheme      String       @default("theme-red")
-  Subsciption      Subsciption?
+  email            String        @unique
+  stripeCustomerId String?       @unique
+  colorScheme      String        @default("theme-red")
+  Subscription     Subscription?
 }
 
-model Subsciption {
+model Subscription {
   stripeSubscriptionId String   @id @unique
   interval             String
   status               String
