@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | Payment Successful",
+};
 
 export default function SuccessPage() {
   return (

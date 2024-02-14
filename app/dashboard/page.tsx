@@ -6,6 +6,11 @@ import { Edit, File } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { revalidatePath } from "next/cache";
 import { DeleteNoteButton } from "@/components/SubmitButtons";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | Dashboard",
+};
 
 async function getData(userId: string) {
   const data = await prisma.note.findMany({

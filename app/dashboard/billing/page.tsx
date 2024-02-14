@@ -14,6 +14,11 @@ import {
   StripePortal,
   StripeSubscriptionCreationButton,
 } from "@/components/SubmitButtons";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | Billing",
+};
 
 const featureItems = [
   { name: "Lorem Ipsum something" },

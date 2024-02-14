@@ -21,6 +21,11 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/SubmitButtons";
 import { revalidatePath } from "next/cache";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | Settings",
+};
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({

@@ -2,6 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { XIcon } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | Payment Failed",
+};
 
 export default function CancelledPage() {
   return (

@@ -16,6 +16,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/SubmitButtons";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "BSP-SaaS | New Note",
+};
 
 export default async function NewNote() {
   const { getUser } = getKindeServerSession();
