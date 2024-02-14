@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Input } from "@/components/ui/input";
-import { SubmitButton } from "@/components/SubmitButton";
+import { SubmitButton } from "@/components/SubmitButtons";
 import { revalidatePath } from "next/cache";
 
 async function getData(userId: string) {
