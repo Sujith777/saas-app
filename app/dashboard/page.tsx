@@ -2,8 +2,10 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Edit, File, Trash } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Edit, File } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { revalidatePath } from "next/cache";
+import { DeleteNoteButton } from "@/components/SubmitButtons";
 
 async function getData(userId: string) {
   const data = await prisma.note.findMany({
@@ -21,6 +23,20 @@ export default async function DashboardPage() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   const data = await getData(user?.id as string);
+
+  async function deleteNote(formData: FormData) {
+    "use server";
+
+    const noteId = formData.get("noteId") as string;
+
+    await prisma.note.delete({
+      where: {
+        id: noteId,
+      },
+    });
+
+    revalidatePath("/dashboard");
+  }
 
   return (
     <div className="grid items-start gap-y-8">
@@ -60,17 +76,21 @@ export default async function DashboardPage() {
               className="flex items-center justify-between p-4"
             >
               <div className="flex flex-col">
-                <h2 className="text-xl font-semibold text-primary">
-                  {item.title}
-                </h2>
-                <p>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "full",
-                  }).format(new Date(item.createdAt))}
-                </p>
-                <p className="text-lg text-muted-foreground">
-                  {item.description}
-                </p>
+                <CardHeader>
+                  <h2 className="text-xl font-semibold text-primary">
+                    {item.title}
+                  </h2>
+                  <p>
+                    {new Intl.DateTimeFormat("en-US", {
+                      dateStyle: "full",
+                    }).format(new Date(item.createdAt))}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-md text-muted-foreground">
+                    {item.description}
+                  </p>
+                </CardContent>
               </div>
               <div className="flex gap-x-4">
                 <Link href={`/dashboard/new/${item.id}`}>
@@ -78,10 +98,10 @@ export default async function DashboardPage() {
                     <Edit className="h-4 w-4" />
                   </Button>
                 </Link>
-                <form action="">
-                  <Button size={"icon"}>
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                <form action={deleteNote}>
+                  <input type="hidden" name="noteId" value={item?.id} />
+
+                  <DeleteNoteButton />
                 </form>
               </div>
             </Card>
