@@ -2,7 +2,8 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { File } from "lucide-react";
+import { Edit, File, Trash } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 async function getData(userId: string) {
   const data = await prisma.note.findMany({
@@ -52,8 +53,39 @@ export default async function DashboardPage() {
           </Button>
         </div>
       ) : (
-        <div>
-          <h1>Notes here</h1>
+        <div className="flex flex-col gap-y-4">
+          {data?.map((item) => (
+            <Card
+              key={item?.id}
+              className="flex items-center justify-between p-4"
+            >
+              <div className="flex flex-col">
+                <h2 className="text-xl font-semibold text-primary">
+                  {item.title}
+                </h2>
+                <p>
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "full",
+                  }).format(new Date(item.createdAt))}
+                </p>
+                <p className="text-lg text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+              <div className="flex gap-x-4">
+                <Link href={`/dashboard/new/${item.id}`}>
+                  <Button variant={"outline"} size={"icon"}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <form action="">
+                  <Button size={"icon"}>
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </form>
+              </div>
+            </Card>
+          ))}
         </div>
       )}
     </div>
