@@ -71,7 +71,7 @@ export default async function BillingPage() {
 
     const subscriptionUrl = await getStripeSession({
       customerId: existingUser?.stripeCustomerId,
-      domainUrl: "http://localhost:3000",
+      domainUrl: "https://bsp-saas-app.vercel.app",
       priceId: process.env.STRIPE_PRICE_ID as string,
     });
     return redirect(subscriptionUrl);
@@ -82,7 +82,7 @@ export default async function BillingPage() {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: data?.user.stripeCustomerId as string,
-      return_url: "http://localhost:3000/dashboard",
+      return_url: "https://bsp-saas-app.vercel.app/dashboard",
     });
 
     return redirect(session.url);
