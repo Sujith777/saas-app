@@ -23,7 +23,9 @@ export default async function Home() {
               Create Notes with ease
             </h1>
             <p className="max-w-xl mx-auto mt-8 text-base lg:text-xl text-secondary-foreground">
-              agfhjgfgfvdcsdvgfnhjk lpoefgrthyomhngfdiefigf
+              Welcome to your one-stop destination to create and organize your
+              notes. Sign in to your account or Get started to start an
+              organized and seamless journey of notes
             </p>
           </div>
           <div className="flex justify-center max-w-sm mx-auto mt-10">
