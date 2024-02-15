@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/SubmitButtons";
 import { revalidatePath } from "next/cache";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "BSP-SaaS | Settings",
@@ -44,6 +45,9 @@ async function getData(userId: string) {
 export default async function SettingsPage() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+
+  if (!user) redirect("/");
+
   const data = await getData(user?.id as string);
 
   async function postData(formData: FormData) {

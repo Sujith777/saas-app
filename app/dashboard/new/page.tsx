@@ -27,7 +27,7 @@ export default async function NewNote() {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("User not authorized");
+    redirect("/");
   }
 
   async function postData(formData: FormData) {

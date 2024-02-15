@@ -47,7 +47,7 @@ export default async function DynamicNote({
     "use server";
 
     if (!user) {
-      throw new Error("User not authorized");
+      redirect("/");
     }
 
     const title = formData.get("title") as string;
